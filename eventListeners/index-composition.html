@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <title>Event listener</title>
+  </head>
+  <body>
+    <div id="app">
+      <button @click="increase">{{count}}</button>
+    </div>
+    <script type="module">
+      import { createApp, ref } from "../js/vue.esm-browser.js";
+      createApp({
+        setup() {
+          const count = ref(0);
+          /* setup에서 화살표 함수가 안되는 경우도 있어 function으로 작성 추천 */
+          //   const increase = () => {
+          //     count.value++;
+          //   };
+          function increase() {
+            //ref는 proxy로 작동해 object형으로 되어 value를 추가해서 값을 변경시켜야한다
+            count.value++;
+          }
+          return {
+            count,
+            increase,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
