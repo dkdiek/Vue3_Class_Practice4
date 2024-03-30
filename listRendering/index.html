@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>listRendering</title>
+  </head>
+  <body>
+    <div id="app">
+      <input v-model="newTodo" @keyup.enter="addTodo" />
+      <button @click="addTodo">추가</button>
+      <ul>
+        <li v-for="(todo, idx) in todos" :key="todo.id">
+          {{todo.id}}. {{todo.text}} : {{idx}}
+        </li>
+      </ul>
+    </div>
+    <script type="module">
+      import { createApp, ref } from "../js/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          let id = 1;
+          const newTodo = ref("");
+          const todos = ref([
+            { id: id++, text: "Learn HTML" },
+            { id: id++, text: "Learn JavaScript" },
+            { id: id++, text: "Learn Vue" },
+          ]);
+          function addTodo() {
+            todos.value.push({ id: id++, text: newTodo.value });
+          }
+
+          return {
+            todos,
+            addTodo,
+            newTodo,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
