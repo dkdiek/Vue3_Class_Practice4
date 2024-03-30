@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>composition api</title>
+  </head>
+  <body>
+    <div id="app">{{message}},{{counter.count}}</div>
+    <script type="module">
+      /* 컴포지션 api는 자동으로 변경이 안되어 ref랑 reactive(object일 경우)를 써야한다 */
+      import { createApp, ref, reactive } from "../js/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const message = ref("hello world");
+          const counter = reactive({ count: 2 });
+          return {
+            message,
+            counter,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

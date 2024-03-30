@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>declarative rendering - options</title>
+  </head>
+  <body>
+    <div id="app">options 방식 {{message}} {{counter.count}}</div>
+
+    <script type="module">
+      /* vue에서 createApp을 가져와 사용하겠다 */
+      import { createApp } from "../js/vue.esm-browser.js";
+      /* 생성한 app을 mount: html #app에 붙인다 */
+      createApp({
+        data() {
+          return {
+            message: "Hello World!",
+            counter: {
+              count: 4,
+            },
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
