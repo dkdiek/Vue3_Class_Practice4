@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>form Bindings</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- <input :value="text" @input="onInput" placeholder="값을 입력하세요"></input> -->
+      <input v-model="text"></input>
+      <span>{{text}}</span>
+      <hr>{{checked}}
+      <input type="checkbox" name="" id="checkbox" v-model="checked"/>
+    </div>
+    <script type="module">
+      import { createApp, ref } from "../js/vue.esm-browser.js";
+      createApp({
+        setup() {
+          const text = ref('sample')
+          // function onInput(e){
+          //   text.value = e.target.value
+          // }
+          const checked = ref("true")
+          return {
+            text,
+            // onInput,
+            checked
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
