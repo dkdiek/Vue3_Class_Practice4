@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AttributeBindings 1개 바인딩</title>
+    <style>
+      .blue {
+        color: blue;
+      }
+      .red {
+        color: red;
+      }
+      #jack {
+        background-color: aqua;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app">
+      <span :class="color" :id="okId">Jack are u okay?</span>
+    </div>
+    <script type="module">
+      import { createApp, ref } from "../js/vue.esm-browser.js";
+      createApp({
+        setup() {
+          const color = ref("blue");
+          const okId = ref("jack");
+          return {
+            color,
+            okId,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
