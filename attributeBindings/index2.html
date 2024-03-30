@@ -3,18 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AttributeBindings2</title>
+    <title>AttributeBindings2 - object로 여러 속성 묶어서 적용</title>
+    <style>
+      .red {
+        color: red;
+      }
+      #dean {
+        background-color: aqua;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
-      <span></span>
+      <!-- 속성 여러개는 :가 아니라 v-bind로 써야함 -->
+      <span v-bind="attrs">Dean, are you ok?</span>
     </div>
     <script type="module">
-      import { createApp, ref } from "../js/vue.esm-browser.js";
+      import { createApp, reactive } from "../js/vue.esm-browser.js";
       createApp({
         setup() {
-          cons;
-          return {};
+          const attrs = reactive({
+            id: "dean",
+            class: "red",
+          });
+          return {
+            attrs,
+          };
         },
       }).mount("#app");
     </script>
