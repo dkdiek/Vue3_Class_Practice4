@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>conditionalRendering</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="checkbox" v-model="toggle" />
+      <hr />
+      <span v-if="toggle">toggle값이 참입니다.</span>
+      <span v-else>toggle값이 거짓입니다.</span>
+    </div>
+    <script type="module">
+      import { createApp, ref } from "../js/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const toggle = ref(true);
+          function toggleMethod() {
+            toggle.value = !toggle.value;
+          }
+          return {
+            toggle,
+            toggleMethod,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
