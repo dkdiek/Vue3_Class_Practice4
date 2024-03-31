@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>emits</title>
+  </head>
+  <body>
+    <div id="app">
+      <child-comp :msg="hello" @response="whoAmI"></child-comp>
+      <h2>{{who}}</h2>
+    </div>
+    <script type="module">
+      import { createApp, ref } from "../js/vue.esm-browser.js";
+      import ChildComp from "./child-comp.js";
+      createApp({
+        components: {
+          ChildComp,
+        },
+        setup() {
+          const hello = ref("hi there");
+          const who = ref("who?");
+          function whoAmI(person) {
+            who.value = person;
+          }
+          return {
+            hello,
+            who,
+            whoAmI,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
