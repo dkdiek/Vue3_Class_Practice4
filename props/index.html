@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>props</title>
+  </head>
+  <body>
+    <div id="app">
+      <child-comp :msg="hello" person="홍길동"></child-comp>
+    </div>
+    <script type="module">
+      import { createApp, ref } from "../js/vue.esm-browser.js";
+      import ChildComp from "./child-comp.js";
+      createApp({
+        components: {
+          ChildComp,
+        },
+        setup() {
+          const hello = ref("good moring");
+          const 홍길동 = ref("김수완무");
+          return {
+            hello,
+            홍길동,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
