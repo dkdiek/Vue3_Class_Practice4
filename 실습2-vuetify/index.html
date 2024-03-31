@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue3 입문 - 실습2 - vuetify적용</title>
+    <meta
+      name="description"
+      content="https://github.com/ohhoonim/no-build-vue.git"
+    />
+    <link rel="stylesheet" href="../js/vuetify.min.css" />
+    <link rel="stylesheet" href="../css/materialdesignicons.min.css" />
+  </head>
+
+  <body>
+    <div id="app">
+      <v-container>
+        <v-row>
+          <v-col
+            ><v-select
+              v-model="filterPrice"
+              :items="priceItem"
+              item-title="label"
+              item-value="price"
+              label="가격"
+              return-object
+            ></v-select
+          ></v-col>
+          <v-col
+            ><v-select
+              v-model="sortProp"
+              :items="sortItem"
+              item-tilte="title"
+              item-value="method"
+              label="정렬"
+              return-object
+            ></v-select
+          ></v-col>
+        </v-row>
+        <v-row>
+          <v-expansion-panels>
+            <v-expansion-panel>
+              <v-expansion-panel-title color="secondary">
+                <v-icon>mdi-cart-variant</v-icon><v-spacer></v-spacer> 신규
+                상품을 등록하려면 클릭하세요
+              </v-expansion-panel-title>
+              <v-expansion-panel-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="8">
+                      <v-text-field
+                        label="상품명"
+                        v-model="newName"
+                        placeholder="상품이름을 적으세요"
+                        clearable
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field
+                        label="가격"
+                        v-model="newPrice"
+                        @keyup.enter="addItem"
+                        type="number"
+                        hint="가격은 숫자로만 입력해주세요"
+                        clearable
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col align="center">
+                      <v-btn
+                        @click="addItem"
+                        variant="outlined"
+                        prepend-icon="mdi-cart-variant"
+                        color="primary"
+                        >상품추가</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-row>
+        <v-row>
+          <v-col class="d-flex justify-center" l>
+            <v-sheet
+              elevation="5"
+              height="2rem"
+              width="300"
+              color="primary"
+              align="center"
+              >총 지불금액: {{ totalPrice.toLocaleString() }}</v-sheet
+            >
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" class="d-flex flex-wrap">
+            <v-card
+              v-for="item in filteredItems"
+              :key="item.uuid"
+              :title="item.name"
+              :subtitle="item.price + '원'"
+              :text="item.uuid"
+              width="230"
+              height="180"
+              variant="outlined"
+            >
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <script type="module">
+      import {
+        createApp,
+        ref,
+        reactive,
+        computed,
+      } from "../js/vue.esm-browser.js";
+      import { createVuetify } from "../js/vuetify.esm-browser.js";
+      import UUIDGenerator from "../js/uuid-generator.js";
+      const vuetify = createVuetify();
+
+      createApp({
+        setup() {
+          const uuid = UUIDGenerator();
+          const newName = ref("");
+          const newPrice = ref(0);
+          const items = ref([
+            {
+              uuid: "2db65102-c85e-401b-8e64-88f629678a3e",
+              name: "새우깡",
+              price: 1600,
+            },
+            {
+              uuid: "52b9ed42-c0f9-474c-aa71-03efdd4cb9d9",
+              name: "초코파이",
+              price: 1700,
+            },
+            {
+              uuid: "33c94445-caa7-4091-98da-b031a163aaf9",
+              name: "에이스",
+              price: 1230,
+            },
+            {
+              uuid: "11c75a6d-e3c6-4341-b1f1-c444e01506ca",
+              name: "양파링",
+              price: 2300,
+            },
+          ]);
+          function addItem() {
+            let newItem = {
+              uuid: uuid.next().value,
+              name: newName.value,
+              price: newPrice.value,
+            };
+            items.value.push(newItem);
+            newName.value = "";
+            newPrice.value = 0;
+          }
+          const filterPrice = ref({ label: "", price: 0 });
+          const priceItem = [
+            { label: "", price: 0 },
+            { label: "1500원(회원할인가)", price: 1500 },
+            { label: "2000원", price: 2000 },
+            { label: "5000원(VIP 체크)", price: 5000 },
+          ];
+          const sortProp = ref({ title: "정렬안함", method: "" });
+          const sortItem = [
+            { title: "정렬안함", method: "" },
+            { title: "오름차순", method: "asc" },
+            { title: "내림차순", method: "desc" },
+          ];
+
+          const filteredItems = computed(() => {
+            let itemList = items.value.filter(
+              (item) => item.price >= filterPrice.value.price
+            );
+            if (sortProp.value.method !== "") {
+              itemList = itemList.sort((a, b) =>
+                sortProp.value.method === "asc"
+                  ? a.price - b.price
+                  : b.price - a.price
+              );
+            }
+            return itemList;
+          });
+
+          function caculatedTotalPrice() {
+            return filteredItems.value.reduce((acc, cur) => acc + cur.price, 0);
+          }
+          const totalPrice = computed(caculatedTotalPrice);
+
+          return {
+            newName,
+            newPrice,
+            items,
+            addItem,
+            totalPrice,
+            filterPrice,
+            priceItem,
+            filteredItems,
+            sortProp,
+            sortItem,
+            uuid,
+          };
+        },
+      })
+        .use(vuetify)
+        .mount("#app");
+    </script>
+  </body>
+</html>
