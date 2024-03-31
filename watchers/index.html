@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>watchers</title>
+  </head>
+  <body>
+    <div id="app"><input v-model="name" /><span>{{errMessage}}</span></div>
+    <script type="module">
+      import { createApp, ref, watch } from "../js/vue.esm-browser.js";
+      createApp({
+        setup() {
+          const name = ref("");
+          const errMessage = ref("");
+          watch(name, (name) => {
+            if (name.length > 10) {
+              errMessage.value = "10자가 넘었습니다.";
+            } else {
+              errMessage.value = "";
+            }
+          });
+          return {
+            name,
+            errMessage,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
