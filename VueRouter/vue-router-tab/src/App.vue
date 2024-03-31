@@ -1,14 +1,14 @@
 <script setup>
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import TabItem from "./components/tabItem.vue";
-import tabStore from "./store/tabsStore";
+import { tabsStore } from "./store/tabsStore";
 
 const router = useRouter();
 /* 만든 라우터 3개를 배열로 가져온다 */
 const routes = router.getRoutes();
-console.log(routes[1].path);
-/* store 메소드 호출 */
-const store = tabStore;
+// console.log(routes[1].path);
+// /* store 메소드 호출 */
+const store = tabsStore();
 const setTabs = (r) => {
   store.addTab(r);
 };
