@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- 1라인 -->
+      <div>
+        구매한 상품명:
+        <input v-model="newName" />
+        가격:
+        <input type="number" v-model="newPrice" />
+        <button @click="addItem">상품추가</button>
+      </div>
+      <!-- 2라인 -->
+      <div>
+        가격이
+        <select v-model="filterPrice">
+          <option value="0" selected>0</option>
+          <option value="1500">1500</option>
+          <option value="2000">2000</option>
+          <option value="5000">5000</option>
+        </select>
+        원 이상인 상품만 보기
+      </div>
+      <!-- 3라인 -->
+      <div>가격정렬 : <select v-model="sortProp">
+        <option value="">정렬안함</option>
+        <option value="asc">오름차순</option>
+        <option value="desc">내림차순</option>
+      </select>
+      <!-- 4라인 -->
+      <div>총 지불금액: {{totalPrice.toLocaleString()}}</div>
+      <!-- 리스트 -->
+      <ul>
+        <li v-for="item in filteredItems" :key="item.uuid">
+          {{item.name}} : {{item.price.toLocaleString()}} : {{item.id}}
+        </li>
+      </ul>
+    </div>
+    <script type="module">
+      import {
+        createApp,
+        reactive,
+        ref,
+        computed,
+      } from "../js/vue.esm-browser.js";
+      import UUIDGenerator from "../js/uuid-generator.js";
+      createApp({
+        setup() {
+          /* 상품추가 */
+          const newName = ref("");
+          const newPrice = ref("");
+          const newUuid = UUIDGenerator();
+          const items = ref([
+            { name: "새우깡", price: 1600, id: "asfasfd" },
+            { name: "초코파이", price: 1700, id: "asfasfd" },
+            { name: "에이스", price: 1230, id: "asfasfd" },
+            { name: "양파링", price: 2300, id: "asfasfd" },
+          ]);
+          function addItem() {
+            let newItem = {
+              id: newUuid.next().value,
+              name: newName.value,
+              price: newPrice.value,
+            };
+            items.value.push(newItem);
+            newName.value = "";
+            newPrice.value = 0;
+          }
+          /* 필터 */
+          const filterPrice = ref(0);
+            const filteredItems = computed(() => {
+              let itemList = items.value.filter(
+                (item) => item.price >= filterPrice.value
+              );
+              if (sortProp.value !== "") {
+                itemList = itemList.sort((a, b) =>
+                  sortProp.value === "asc"
+                    ? a.price - b.price
+                    : b.price - a.price
+                );
+              }
+              return itemList;
+            });
+            const sortProp = ref("");
+            /* 총합 구하기 */
+            function calculatedTotalPrice(){
+                /* 배열.reduce(callback(누적값, 현재값, 인덱스, 요소), 초기값); */
+                return filteredItems.value.reduce((acc, cur)=> acc + cur.price, 0)
+            }
+            const totalPrice = computed(calculatedTotalPrice)
+
+          return {
+            items,
+            newName,
+            newPrice,
+            newUuid,
+            addItem,
+            filterPrice,
+            filteredItems,
+            sortProp,
+            totalPrice
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
