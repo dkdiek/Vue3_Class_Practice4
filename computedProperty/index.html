@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>computed property</title>
+  </head>
+  <body>
+    <div id="app">
+      <li v-for="person  in items">{{person.name}} : {{person.age}}</li>
+      <!-- 함수는()를 써야하고 컴퓨티드는 안써도 된다 -->
+      {{totalAge}}
+    </div>
+    <script type="module">
+      import { createApp, ref, computed } from "../js/vue.esm-browser.js";
+
+      createApp({
+        setup() {
+          const items = ref([
+            { id: 1, name: "matthew", age: 30 },
+            { id: 2, name: "a", age: 12 },
+            { id: 3, name: "bn", age: 55 },
+            { id: 4, name: "c", age: 42 },
+          ]);
+          /* 함수 정의 */
+          function calculateTotalAge() {
+            return items.value.reduce((acc, cur) => acc + cur.age, 0);
+          }
+          /* 위에 함수를 computed에 넣는다 */
+          const totalAge = computed(calculateTotalAge);
+          return {
+            items,
+            totalAge,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
